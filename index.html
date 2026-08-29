@@ -36,6 +36,7 @@
     line-height: 1.8;
     font-size: clamp(15px, 0.4vw + 14px, 17px);
   }
+  html[lang="en"] body { letter-spacing: 0.01em; }
 
   ::selection { background: var(--ink); color: var(--paper); }
 
@@ -73,7 +74,8 @@
     user-select: none;
   }
   .statusbar .site { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  #theme-toggle {
+  .statusbar .ctrls { display: flex; align-items: center; gap: 12px; flex: none; }
+  .statusbar button {
     font: inherit;
     font-family: inherit;
     font-size: 12px;
@@ -83,9 +85,8 @@
     border: 1px solid var(--line-strong);
     padding: 2px 10px;
     cursor: pointer;
-    flex: none;
   }
-  #theme-toggle:hover { background: var(--ink); color: var(--paper); }
+  .statusbar button:hover { background: var(--ink); color: var(--paper); }
 
   /* ---------- 头部 ---------- */
   header h1 {
@@ -153,6 +154,10 @@
     font-size: 13px;
     color: var(--ink-faint);
     padding-top: 2px;
+  }
+  @media (max-width: 480px) {
+    .about-list li { flex-direction: column; gap: 2px; }
+    .about-list .k { flex-basis: auto; }
   }
 
   /* ---------- 项目卡片 ---------- */
@@ -246,12 +251,8 @@
     color: var(--ink-faint);
   }
 
-  @media (max-width: 480px) {
-    .about-list li { flex-direction: column; gap: 2px; }
-  }
-
   @media print {
-    body::before, #theme-toggle { display: none; }
+    body::before, .statusbar button { display: none; }
   }
 </style>
 </head>
@@ -262,14 +263,17 @@
   <div class="statusbar">
     <span class="site">yuan-source-666.github.io</span>
     <span id="clock">--:--</span>
-    <button id="theme-toggle" type="button" title="切换反色">反转</button>
+    <div class="ctrls">
+      <button id="lang-toggle" type="button" title="Switch language">EN</button>
+      <button id="theme-toggle" type="button" title="切换反色">反转</button>
+    </div>
   </div>
 
   <!-- 头部 -->
   <header>
     <h1>yuan-source</h1>
-    <div class="role">PHYSICS @  · INDEPENDENT RESEARCHER</div>
-    <p class="bio">
+    <div class="role" data-i18n="role">PHYSICS @  · 独立研究者</div>
+    <p class="bio" data-i18n="bio">
       物理学（师范）专业在读，业余以个人研究者的身份折腾小模型的"自进化"：
       不训练权重，只靠程序侧架构，看有效智能能被推到多远。
       相信智能不一定要以庞大的算力为前提，就像墨水屏不需要背光。
@@ -280,11 +284,20 @@
 
   <!-- 关于 -->
   <section>
-    <h2><span class="no">01</span>关于</h2>
+    <h2><span class="no">01</span><span data-i18n="sec-about">关于</span></h2>
     <ul class="about-list">
-      <li><span class="k">正在做</span><span>单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。</span></li>
-      <li><span class="k">研究</span><span>LLM 编排、结构动力学、认知架构三条路线的实证对比。</span></li>
-      <li><span class="k">工具</span><span>Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。</span></li>
+      <li>
+        <span class="k" data-i18n="k-doing">正在做</span>
+        <span data-i18n="v-doing">单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。</span>
+      </li>
+      <li>
+        <span class="k" data-i18n="k-research">研究</span>
+        <span data-i18n="v-research">LLM 编排、结构动力学、认知架构三条路线的实证对比。</span>
+      </li>
+      <li>
+        <span class="k" data-i18n="k-tools">工具</span>
+        <span data-i18n="v-tools">Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。</span>
+      </li>
     </ul>
   </section>
 
@@ -292,36 +305,42 @@
 
   <!-- 项目 -->
   <section>
-    <h2><span class="no">02</span>项目</h2>
+    <h2><span class="no">02</span><span data-i18n="sec-projects">项目</span></h2>
     <div class="projects">
       <a class="project-link" href="https://github.com/yuan-source-666/agi-research-evolution-os" target="_blank" rel="noopener">
         <article class="project">
           <div class="head">
             <h3>agi-research-evolution-os</h3>
-            <time>2026 · 论文配套</time>
+            <time data-i18n="p1-time">2026 · 论文配套</time>
           </div>
-          <p>LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现"改进—回归—检测—回滚—恢复"安全行为链。</p>
-          <div class="tags"><span class="tag">Python</span><span class="tag">Qwen2.5</span><span class="tag">SCNet 超算</span></div>
+          <p data-i18n="p1-desc">LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现"改进—回归—检测—回滚—恢复"安全行为链。</p>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">Qwen2.5</span><span class="tag" data-i18n="p1-t3">SCNet 超算</span>
+          </div>
         </article>
       </a>
       <a class="project-link" href="#">
         <article class="project">
           <div class="head">
-            <h3>基元社会 · PRIMORDIA</h3>
-            <time>2026 · 第三代迭代</time>
+            <h3 data-i18n="p2-title">基元社会 · PRIMORDIA</h3>
+            <time data-i18n="p2-time">2026 · 第三代迭代</time>
           </div>
-          <p>无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了"宏工具配方"。</p>
-          <div class="tags"><span class="tag">结构动力学</span><span class="tag">涌现</span></div>
+          <p data-i18n="p2-desc">无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了"宏工具配方"。</p>
+          <div class="tags">
+            <span class="tag" data-i18n="p2-t1">结构动力学</span><span class="tag" data-i18n="p2-t2">涌现</span>
+          </div>
         </article>
       </a>
       <a class="project-link" href="#">
         <article class="project">
           <div class="head">
-            <h3>认知架构五件套</h3>
-            <time>2026 · 参考实现</time>
+            <h3 data-i18n="p3-title">认知架构五件套</h3>
+            <time data-i18n="p3-time">2026 · 参考实现</time>
           </div>
-          <p>持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。</p>
-          <div class="tags"><span class="tag">认知架构</span><span class="tag">持续学习</span></div>
+          <p data-i18n="p3-desc">持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。</p>
+          <div class="tags">
+            <span class="tag" data-i18n="p3-t1">认知架构</span><span class="tag" data-i18n="p3-t2">持续学习</span>
+          </div>
         </article>
       </a>
     </div>
@@ -331,10 +350,10 @@
 
   <!-- 近期笔记 -->
   <section>
-    <h2><span class="no">03</span>近期笔记</h2>
+    <h2><span class="no">03</span><span data-i18n="sec-notes">近期笔记</span></h2>
     <ul class="notes">
-      <li><time>2026-08</time><a href="#">完成论文期刊投稿版：小模型自进化的三条程序侧架构路线</a></li>
-      <li><time>2026-02</time><a href="#">在 SCNet 海光 DCU 上跑通第一条自进化循环</a></li>
+      <li><time>2026-08</time><a href="#" data-i18n="note1">完成论文期刊投稿版：小模型自进化的三条程序侧架构路线</a></li>
+      <li><time>2026-02</time><a href="#" data-i18n="note2">在 SCNet 海光 DCU 上跑通第一条自进化循环</a></li>
     </ul>
   </section>
 
@@ -342,7 +361,7 @@
 
   <!-- 联系 -->
   <section>
-    <h2><span class="no">04</span>联系</h2>
+    <h2><span class="no">04</span><span data-i18n="sec-contact">联系</span></h2>
     <div class="contact">
       <a class="mono" href="mailto:"></a>
       <a href="https://github.com/yuan-source-666" target="_blank" rel="noopener">GitHub</a>
@@ -353,13 +372,95 @@
   <!-- 页脚 -->
   <footer>
     <span>© 2026 yuan-source</span>
-    <span>EPD · 300 DPI · 无闪烁渲染</span>
+    <span data-i18n="foot-right">EPD · 300 DPI · 无闪烁渲染</span>
   </footer>
 
 </div>
 
 <script>
-  // 时钟：墨水屏设备常见的状态栏时间
+  // ---------- 双语文案 ----------
+  var I18N = {
+    zh: {
+      "role": "PHYSICS @  · 独立研究者",
+      "bio": "物理学（师范）专业在读，业余以个人研究者的身份折腾小模型的\"自进化\"：不训练权重，只靠程序侧架构，看有效智能能被推到多远。相信智能不一定要以庞大的算力为前提，就像墨水屏不需要背光。",
+      "sec-about": "关于",
+      "k-doing": "正在做", "v-doing": "单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。",
+      "k-research": "研究", "v-research": "LLM 编排、结构动力学、认知架构三条路线的实证对比。",
+      "k-tools": "工具", "v-tools": "Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。",
+      "sec-projects": "项目",
+      "p1-time": "2026 · 论文配套",
+      "p1-desc": "LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现\"改进—回归—检测—回滚—恢复\"安全行为链。",
+      "p1-t3": "SCNet 超算",
+      "p2-title": "基元社会 · PRIMORDIA", "p2-time": "2026 · 第三代迭代",
+      "p2-desc": "无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了\"宏工具配方\"。",
+      "p2-t1": "结构动力学", "p2-t2": "涌现",
+      "p3-title": "认知架构五件套", "p3-time": "2026 · 参考实现",
+      "p3-desc": "持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。",
+      "p3-t1": "认知架构", "p3-t2": "持续学习",
+      "sec-notes": "近期笔记",
+      "note1": "完成论文期刊投稿版：小模型自进化的三条程序侧架构路线",
+      "note2": "在 SCNet 海光 DCU 上跑通第一条自进化循环",
+      "sec-contact": "联系",
+      "foot-right": "EPD · 300 DPI · 无闪烁渲染",
+      "theme-label": "反转", "theme-title": "切换反色",
+      "lang-label": "EN", "lang-title": "Switch to English"
+    },
+    en: {
+      "role": "PHYSICS @  · INDEPENDENT RESEARCHER",
+      "bio": "Undergraduate in Physics (Teacher Education). As an independent researcher, I tinker with \"self-evolving\" small models in my spare time: no weight training, only program-side architecture, to see how far effective intelligence can be pushed. I believe intelligence need not presuppose massive compute — just as e-ink needs no backlight.",
+      "sec-about": "About",
+      "k-doing": "Now", "v-doing": "Single-author paper \"Three Program-Side Architecture Routes Toward Small-Model Self-Evolution\" in preparation for submission.",
+      "k-research": "Research", "v-research": "Empirical comparison of three routes: LLM orchestration, structural dynamics, and cognitive architecture.",
+      "k-tools": "Toolkit", "v-tools": "Writing in Obsidian, experimenting on the SCNet supercomputer, Qwen2.5 as the cognitive core.",
+      "sec-projects": "Projects",
+      "p1-time": "2026 · Paper companion",
+      "p1-desc": "LLM-orchestrated self-evolving system: nine-level evolution loop + reflection cycle + benchmark gate with automatic rollback. Success rate on verification-guarded tasks rose from 0.500 to 0.825, exhibiting the full safety chain of improvement–regression–detection–rollback–recovery.",
+      "p1-t3": "SCNet DCU",
+      "p2-title": "Society of Primitives · PRIMORDIA", "p2-time": "2026 · Third generation",
+      "p2-desc": "A centerless, weight-free, LLM-free structural-dynamics system driven only by mean-field interaction and five natural rules; it spontaneously consolidated \"macro-tool recipes\" within 3000 cycles.",
+      "p2-t1": "Structural dynamics", "p2-t2": "Emergence",
+      "p3-title": "Cognitive Architecture Quintet", "p3-time": "2026 · Reference impl.",
+      "p3-desc": "A reproducible implementation of five orthogonal components — continual learning, hierarchical memory, world model, metacognition, and intrinsic motivation — passing all 14 unit tests.",
+      "p3-t1": "Cognitive architecture", "p3-t2": "Continual learning",
+      "sec-notes": "Notes",
+      "note1": "Finished the journal submission draft: three program-side architecture routes toward small-model self-evolution",
+      "note2": "Ran the first self-evolution loop on a Hygon DCU instance on SCNet",
+      "sec-contact": "Contact",
+      "foot-right": "EPD · 300 DPI · Flicker-free",
+      "theme-label": "Invert", "theme-title": "Toggle inverted mode",
+      "lang-label": "中文", "lang-title": "切换为中文"
+    }
+  };
+
+  var root = document.documentElement;
+
+  function store(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
+  function load(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
+
+  // ---------- 语言切换：默认中文 ----------
+  var lang = load("ink-lang") === "en" ? "en" : "zh";
+
+  function applyLang(l) {
+    lang = l;
+    root.setAttribute("lang", l === "en" ? "en" : "zh-CN");
+    var dict = I18N[l];
+    document.querySelectorAll("[data-i18n]").forEach(function (el) {
+      var key = el.getAttribute("data-i18n");
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+    document.getElementById("lang-toggle").textContent = dict["lang-label"];
+    document.getElementById("lang-toggle").title = dict["lang-title"];
+    document.getElementById("theme-toggle").textContent = dict["theme-label"];
+    document.getElementById("theme-toggle").title = dict["theme-title"];
+    document.title = l === "en" ? "yuan-source" : "yuan-source";
+    store("ink-lang", l);
+  }
+
+  document.getElementById("lang-toggle").addEventListener("click", function () {
+    applyLang(lang === "zh" ? "en" : "zh");
+  });
+
+  // ---------- 时钟 ----------
   function tick() {
     var d = new Date();
     var pad = function (n) { return String(n).padStart(2, "0"); };
@@ -369,17 +470,18 @@
   tick();
   setInterval(tick, 30000);
 
-  // 反色切换：模拟墨水屏夜间模式，偏好存入 localStorage
-  var root = document.documentElement;
-  var saved = null;
-  try { saved = localStorage.getItem("ink-theme"); } catch (e) {}
-  if (saved) root.setAttribute("data-theme", saved);
+  // ---------- 反色切换：模拟墨水屏夜间模式 ----------
+  var savedTheme = load("ink-theme");
+  if (savedTheme) root.setAttribute("data-theme", savedTheme);
 
   document.getElementById("theme-toggle").addEventListener("click", function () {
     var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
-    try { localStorage.setItem("ink-theme", next); } catch (e) {}
+    store("ink-theme", next);
   });
+
+  // 初始化语言
+  applyLang(lang);
 </script>
 </body>
 </html>
