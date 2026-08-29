@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>yuan-source · yuan-source</title>
-<meta name="description" content="yuan-source（yuan-source）的个人主页 —— 物理学（师范）在读，独立研究小模型自进化与认知架构。墨水屏简约风格。">
+<title>yuan-source</title>
+<meta name="description" content="yuan-source 的个人主页 —— 物理学（师范）在读，独立研究小模型自进化与认知架构。墨水屏简约风格。">
 <style>
   :root {
     --paper: #f4f2ec;
@@ -33,7 +33,7 @@
     background: var(--paper);
     color: var(--ink);
     font-family: "Georgia", "Times New Roman", "Songti SC", "SimSun", "Noto Serif SC", serif;
-    line-height: 1.75;
+    line-height: 1.8;
     font-size: clamp(15px, 0.4vw + 14px, 17px);
   }
 
@@ -51,9 +51,9 @@
   }
 
   .wrap {
-    max-width: 1080px;
+    max-width: 760px;
     margin: 0 auto;
-    padding: clamp(24px, 4vw, 56px) clamp(20px, 4vw, 48px) 64px;
+    padding: clamp(24px, 4vw, 56px) clamp(20px, 4vw, 40px) 64px;
   }
 
   /* ---------- 状态栏：模拟电子阅读器顶栏 ---------- */
@@ -61,6 +61,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 16px;
     font-family: "SFMono-Regular", Consolas, "Courier New", monospace;
     font-size: 12px;
     letter-spacing: 0.08em;
@@ -68,10 +69,10 @@
     border-top: 2px solid var(--ink);
     border-bottom: 1px solid var(--line-strong);
     padding: 8px 2px;
-    margin-bottom: clamp(40px, 6vw, 88px);
+    margin-bottom: clamp(44px, 6vw, 80px);
     user-select: none;
   }
-  .statusbar .site { color: var(--ink); }
+  .statusbar .site { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   #theme-toggle {
     font: inherit;
     font-family: inherit;
@@ -82,104 +83,48 @@
     border: 1px solid var(--line-strong);
     padding: 2px 10px;
     cursor: pointer;
+    flex: none;
   }
   #theme-toggle:hover { background: var(--ink); color: var(--paper); }
 
-  /* ---------- 桌面双栏布局 ---------- */
-  .layout {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: clamp(40px, 5vw, 80px);
-  }
-  @media (min-width: 900px) {
-    .layout {
-      grid-template-columns: minmax(300px, 5fr) 7fr;
-      align-items: start;
-    }
-    aside { position: sticky; top: 48px; }
-  }
-
-  /* ---------- 头部（左栏） ---------- */
-  header .zh-name {
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 13px;
-    letter-spacing: 0.5em;
-    color: var(--ink-faint);
-    margin-bottom: 10px;
-  }
+  /* ---------- 头部 ---------- */
   header h1 {
-    font-size: clamp(44px, 5.5vw, 72px);
+    font-size: clamp(38px, 5vw, 56px);
     font-weight: 700;
-    letter-spacing: 0.02em;
-    line-height: 1.05;
-    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    line-height: 1.15;
   }
-  header h1 .given { display: block; font-weight: 400; }
   header .role {
-    margin-top: 18px;
+    margin-top: 12px;
     font-family: "SFMono-Regular", Consolas, monospace;
     font-size: 12px;
     color: var(--ink-soft);
     letter-spacing: 0.14em;
-    border-left: 3px solid var(--ink);
-    padding-left: 12px;
   }
   header p.bio {
-    margin-top: 20px;
+    margin-top: 22px;
     color: var(--ink-soft);
+    max-width: 36em;
   }
 
-  /* 左栏联系方式 */
-  .contact {
-    margin-top: 32px;
-    padding-top: 20px;
-    border-top: 1px solid var(--line-strong);
-    display: grid;
-    gap: 10px;
-  }
-  .contact a {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-    color: var(--ink);
-    text-decoration: none;
-    font-size: 14px;
-  }
-  .contact a .label {
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    color: var(--ink-faint);
-  }
-  .contact a .value {
-    border-bottom: 1px solid var(--line-strong);
-    padding-bottom: 1px;
-    word-break: break-all;
-    text-align: right;
-  }
-  .contact a:hover .value { border-bottom-color: var(--ink); }
-
-  /* ---------- 墨点分隔线（移动端用） ---------- */
+  /* ---------- 墨点分隔线 ---------- */
   .dither {
     border: 0;
     height: 6px;
-    margin: 40px 0;
+    margin: clamp(36px, 5vw, 56px) 0;
     background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
     background-size: 6px 6px;
     background-position: center;
   }
-  @media (min-width: 900px) { .dither { display: none; } }
 
   /* ---------- 章节 ---------- */
-  section + section { margin-top: clamp(44px, 5vw, 72px); }
   section h2 {
     display: flex;
     align-items: baseline;
     gap: 14px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
-    letter-spacing: 0.18em;
+    letter-spacing: 0.16em;
     margin-bottom: 24px;
   }
   section h2 .no {
@@ -271,9 +216,25 @@
   .notes a { color: var(--ink); text-decoration: none; }
   .notes a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
+  /* ---------- 联系方式 ---------- */
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 24px;
+    align-items: baseline;
+  }
+  .contact a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 1px;
+  }
+  .contact a:hover { border-bottom-color: var(--ink); }
+  .contact .mono { font-family: "SFMono-Regular", Consolas, monospace; font-size: 14px; }
+
   /* ---------- 页脚 ---------- */
   footer {
-    margin-top: clamp(56px, 7vw, 96px);
+    margin-top: clamp(56px, 7vw, 88px);
     padding-top: 20px;
     border-top: 2px solid var(--ink);
     display: flex;
@@ -304,98 +265,94 @@
     <button id="theme-toggle" type="button" title="切换反色">反转</button>
   </div>
 
-  <div class="layout">
+  <!-- 头部 -->
+  <header>
+    <h1>yuan-source</h1>
+    <div class="role">PHYSICS @  · INDEPENDENT RESEARCHER</div>
+    <p class="bio">
+      物理学（师范）专业在读，业余以个人研究者的身份折腾小模型的"自进化"：
+      不训练权重，只靠程序侧架构，看有效智能能被推到多远。
+      相信智能不一定要以庞大的算力为前提，就像墨水屏不需要背光。
+    </p>
+  </header>
 
-    <!-- 左栏：身份信息 -->
-    <aside>
-      <header>
-        <div class="zh-name">邢 思 源</div>
-        <h1>Xing<span class="given">Siyuan</span></h1>
-        <div class="role">PHYSICS @  · 独立研究者</div>
-        <p class="bio">
-          物理学（师范）专业在读，业余以个人研究者的身份折腾小模型的"自进化"：
-          不训练权重，只靠程序侧架构，看有效智能能被推到多远。
-          相信智能不一定要以庞大的算力为前提，就像墨水屏不需要背光。
-        </p>
-      </header>
+  <hr class="dither">
 
-      <nav class="contact">
-        <a href="mailto:">
-          <span class="label">MAIL</span><span class="value"></span>
-        </a>
-        <a href="https://github.com/yuan-source-666" target="_blank" rel="noopener">
-          <span class="label">GITHUB</span><span class="value">yuan-source-666</span>
-        </a>
-        <a href="https://" target="_blank" rel="noopener">
-          <span class="label">ORCID</span><span class="value"></span>
-        </a>
-      </nav>
-    </aside>
+  <!-- 关于 -->
+  <section>
+    <h2><span class="no">01</span>关于</h2>
+    <ul class="about-list">
+      <li><span class="k">正在做</span><span>单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。</span></li>
+      <li><span class="k">研究</span><span>LLM 编排、结构动力学、认知架构三条路线的实证对比。</span></li>
+      <li><span class="k">工具</span><span>Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。</span></li>
+    </ul>
+  </section>
 
-    <!-- 右栏：内容 -->
-    <main>
-      <section>
-        <h2><span class="no">01</span>关于</h2>
-        <ul class="about-list">
-          <li><span class="k">正在做</span><span>单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。</span></li>
-          <li><span class="k">研究</span><span>LLM 编排、结构动力学、认知架构三条路线的实证对比。</span></li>
-          <li><span class="k">工具</span><span>Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。</span></li>
-        </ul>
-      </section>
+  <hr class="dither">
 
-      <hr class="dither">
+  <!-- 项目 -->
+  <section>
+    <h2><span class="no">02</span>项目</h2>
+    <div class="projects">
+      <a class="project-link" href="https://github.com/yuan-source-666/agi-research-evolution-os" target="_blank" rel="noopener">
+        <article class="project">
+          <div class="head">
+            <h3>agi-research-evolution-os</h3>
+            <time>2026 · 论文配套</time>
+          </div>
+          <p>LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现"改进—回归—检测—回滚—恢复"安全行为链。</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">Qwen2.5</span><span class="tag">SCNet 超算</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="#">
+        <article class="project">
+          <div class="head">
+            <h3>基元社会 · PRIMORDIA</h3>
+            <time>2026 · 第三代迭代</time>
+          </div>
+          <p>无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了"宏工具配方"。</p>
+          <div class="tags"><span class="tag">结构动力学</span><span class="tag">涌现</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="#">
+        <article class="project">
+          <div class="head">
+            <h3>认知架构五件套</h3>
+            <time>2026 · 参考实现</time>
+          </div>
+          <p>持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。</p>
+          <div class="tags"><span class="tag">认知架构</span><span class="tag">持续学习</span></div>
+        </article>
+      </a>
+    </div>
+  </section>
 
-      <section>
-        <h2><span class="no">02</span>项目</h2>
-        <div class="projects">
-          <a class="project-link" href="https://github.com/yuan-source-666/agi-research-evolution-os" target="_blank" rel="noopener">
-            <article class="project">
-              <div class="head">
-                <h3>agi-research-evolution-os</h3>
-                <time>2026 · 论文配套</time>
-              </div>
-              <p>LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现"改进—回归—检测—回滚—恢复"安全行为链。</p>
-              <div class="tags"><span class="tag">Python</span><span class="tag">Qwen2.5</span><span class="tag">SCNet 超算</span></div>
-            </article>
-          </a>
-          <a class="project-link" href="#">
-            <article class="project">
-              <div class="head">
-                <h3>基元社会 · PRIMORDIA</h3>
-                <time>2026 · 第三代迭代</time>
-              </div>
-              <p>无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了"宏工具配方"。</p>
-              <div class="tags"><span class="tag">结构动力学</span><span class="tag">涌现</span></div>
-            </article>
-          </a>
-          <a class="project-link" href="#">
-            <article class="project">
-              <div class="head">
-                <h3>认知架构五件套</h3>
-                <time>2026 · 参考实现</time>
-              </div>
-              <p>持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。</p>
-              <div class="tags"><span class="tag">认知架构</span><span class="tag">持续学习</span></div>
-            </article>
-          </a>
-        </div>
-      </section>
+  <hr class="dither">
 
-      <hr class="dither">
+  <!-- 近期笔记 -->
+  <section>
+    <h2><span class="no">03</span>近期笔记</h2>
+    <ul class="notes">
+      <li><time>2026-08</time><a href="#">完成论文期刊投稿版：小模型自进化的三条程序侧架构路线</a></li>
+      <li><time>2026-02</time><a href="#">在 SCNet 海光 DCU 上跑通第一条自进化循环</a></li>
+    </ul>
+  </section>
 
-      <section>
-        <h2><span class="no">03</span>近期笔记</h2>
-        <ul class="notes">
-          <li><time>2026-08</time><a href="#">完成论文期刊投稿版：小模型自进化的三条程序侧架构路线</a></li>
-          <li><time>2026-02</time><a href="#">在 SCNet 海光 DCU 上跑通第一条自进化循环</a></li>
-        </ul>
-      </section>
-    </main>
-  </div>
+  <hr class="dither">
+
+  <!-- 联系 -->
+  <section>
+    <h2><span class="no">04</span>联系</h2>
+    <div class="contact">
+      <a class="mono" href="mailto:"></a>
+      <a href="https://github.com/yuan-source-666" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://" target="_blank" rel="noopener">ORCID</a>
+    </div>
+  </section>
 
   <!-- 页脚 -->
   <footer>
-    <span>© 2026 yuan-source · </span>
+    <span>© 2026 yuan-source</span>
     <span>EPD · 300 DPI · 无闪烁渲染</span>
   </footer>
 
