@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>yuan-source · 个人主页</title>
+<meta name="description" content="yuan-source的个人主页 —— 物理学（师范）在读，独立研究小模型自进化与认知架构。墨水屏简约风格。">
+<style>
+  :root {
+    --paper: #f4f2ec;
+    --ink: #1c1b18;
+    --ink-soft: #55524b;
+    --ink-faint: #8a867c;
+    --line: #d9d5ca;
+    --line-strong: #b8b3a6;
+    --card: #faf9f5;
+  }
+
+  /* 暗色模式：模拟墨水屏反色 */
+  html[data-theme="dark"] {
+    --paper: #191917;
+    --ink: #e8e6df;
+    --ink-soft: #b3b0a6;
+    --ink-faint: #7d7a71;
+    --line: #3a3833;
+    --line-strong: #55524a;
+    --card: #201f1d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Georgia", "Times New Roman", "Songti SC", "SimSun", "Noto Serif SC", serif;
+    line-height: 1.75;
+    font-size: 16px;
+    transition: none; /* 墨水屏没有渐变过渡，切换是瞬时的 */
+  }
+
+  /* 纸张颗粒噪点，覆盖全屏，模拟墨水屏纹理 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ---------- 状态栏：模拟电子阅读器顶栏 ---------- */
+  .statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "SFMono-Regular", Consolas, "Courier New", monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink-faint);
+    border: 1px solid var(--line-strong);
+    padding: 6px 12px;
+    margin-bottom: 56px;
+    user-select: none;
+  }
+  .statusbar .icons { display: flex; align-items: center; gap: 12px; }
+  .statusbar svg { display: block; }
+
+  /* ---------- 头部 ---------- */
+  header h1 {
+    font-size: 42px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.25;
+  }
+  header .role {
+    margin-top: 6px;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.12em;
+  }
+  header p.bio {
+    margin-top: 20px;
+    color: var(--ink-soft);
+    max-width: 34em;
+  }
+
+  /* ---------- 墨点分隔线 ---------- */
+  .dither {
+    border: 0;
+    height: 6px;
+    margin: 48px 0;
+    background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
+    background-size: 6px 6px;
+    background-position: center;
+  }
+
+  /* ---------- 章节 ---------- */
+  section h2 {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: 0.25em;
+    color: var(--ink-faint);
+    margin-bottom: 20px;
+  }
+  section h2::before { content: "§ "; }
+
+  .about-list {
+    list-style: none;
+  }
+  .about-list li {
+    display: flex;
+    gap: 16px;
+    padding: 6px 0;
+    color: var(--ink-soft);
+  }
+  .about-list .k {
+    flex: 0 0 5.5em;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 13px;
+    color: var(--ink-faint);
+    padding-top: 2px;
+  }
+
+  /* ---------- 项目卡片 ---------- */
+  .projects { display: grid; gap: 16px; }
+  .project {
+    border: 1px solid var(--line-strong);
+    background: var(--card);
+    padding: 18px 20px 16px;
+  }
+  .project .head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .project h3 {
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .project time {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+  .project p {
+    margin-top: 6px;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .project .tags {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-soft);
+    border: 1px solid var(--line-strong);
+    padding: 1px 8px;
+    border-radius: 999px;
+  }
+  a.project-link { color: inherit; text-decoration: none; display: block; }
+  a.project-link:hover h3 { text-decoration: underline; text-underline-offset: 4px; }
+
+  /* ---------- 笔记列表 ---------- */
+  .notes { list-style: none; }
+  .notes li {
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    padding: 8px 0;
+    border-bottom: 1px dotted var(--line);
+  }
+  .notes li:last-child { border-bottom: 0; }
+  .notes time {
+    flex: 0 0 5.5em;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+  .notes a {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  .notes a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+  /* ---------- 联系方式 ---------- */
+  .links { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+  .links a {
+    color: var(--ink);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 1px;
+  }
+  .links a:hover { border-bottom-color: var(--ink); }
+  .links .mono {
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 14px;
+  }
+
+  /* ---------- 页脚 ---------- */
+  footer {
+    margin-top: 64px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line-strong);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* ---------- 反转按钮 ---------- */
+  #theme-toggle {
+    font: inherit;
+    font-family: "SFMono-Regular", Consolas, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    background: transparent;
+    border: 1px solid var(--line-strong);
+    padding: 2px 10px;
+    cursor: pointer;
+  }
+  #theme-toggle:hover { background: var(--ink); color: var(--paper); }
+
+  /* 打印友好 */
+  @media print {
+    body::before, #theme-toggle { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    header h1 { font-size: 32px; }
+    .wrap { padding-top: 32px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 顶栏 -->
+  <div class="statusbar">
+    <span id="clock">--:--</span>
+    <div class="icons">
+      <button id="theme-toggle" type="button" title="切换反色">反转</button>
+    </div>
+  </div>
+
+  <!-- 头部 -->
+  <header>
+    <h1>yuan-source</h1>
+    <div class="role">PHYSICS @  · 独立研究者</div>
+    <p class="bio">
+      物理学（师范）专业在读，业余以个人研究者的身份折腾小模型的"自进化"：
+      不训练权重，只靠程序侧架构，看有效智能能被推到多远。
+      相信智能不一定要以庞大的算力为前提，就像墨水屏不需要背光。
+    </p>
+  </header>
+
+  <hr class="dither">
+
+  <!-- 关于 -->
+  <section>
+    <h2>关于</h2>
+    <ul class="about-list">
+      <li><span class="k">正在做</span><span>单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。</span></li>
+      <li><span class="k">研究</span><span>LLM 编排、结构动力学、认知架构三条路线的实证对比。</span></li>
+      <li><span class="k">工具</span><span>Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。</span></li>
+    </ul>
+  </section>
+
+  <hr class="dither">
+
+  <!-- 项目 -->
+  <section>
+    <h2>项目</h2>
+    <div class="projects">
+      <a class="project-link" href="https://github.com/yuan-source-666/agi-research-evolution-os" target="_blank" rel="noopener">
+        <article class="project">
+          <div class="head">
+            <h3>agi-research-evolution-os</h3>
+            <time>2026 · 论文配套</time>
+          </div>
+          <p>LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现"改进—回归—检测—回滚—恢复"安全行为链。</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">Qwen2.5</span><span class="tag">SCNet 超算</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="#">
+        <article class="project">
+          <div class="head">
+            <h3>基元社会 · PRIMORDIA</h3>
+            <time>2026 · 第三代迭代</time>
+          </div>
+          <p>无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了"宏工具配方"。</p>
+          <div class="tags"><span class="tag">结构动力学</span><span class="tag">涌现</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="#">
+        <article class="project">
+          <div class="head">
+            <h3>认知架构五件套</h3>
+            <time>2026 · 参考实现</time>
+          </div>
+          <p>持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。</p>
+          <div class="tags"><span class="tag">认知架构</span><span class="tag">持续学习</span></div>
+        </article>
+      </a>
+    </div>
+  </section>
+
+  <hr class="dither">
+
+  <!-- 笔记 -->
+  <section>
+    <h2>近期笔记</h2>
+    <ul class="notes">
+      <li><time>2026-08</time><a href="#">完成论文期刊投稿版：小模型自进化的三条程序侧架构路线</a></li>
+      <li><time>2026-02</time><a href="#">在 SCNet 海光 DCU 上跑通第一条自进化循环</a></li>
+    </ul>
+  </section>
+
+  <hr class="dither">
+
+  <!-- 联系 -->
+  <section>
+    <h2>联系</h2>
+    <div class="links">
+      <a class="mono" href="mailto:"></a>
+      <a href="https://github.com/yuan-source-666" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://" target="_blank" rel="noopener">ORCID</a>
+    </div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer>
+    <span>© 2026 yuan-source · </span>
+    <span>EPD · 300 DPI · 无闪烁渲染</span>
+  </footer>
+
+</div>
+
+<script>
+  // 时钟：墨水屏设备常见的状态栏时间
+  function tick() {
+    var d = new Date();
+    var pad = function (n) { return String(n).padStart(2, "0"); };
+    document.getElementById("clock").textContent =
+      pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  tick();
+  setInterval(tick, 30000);
+
+  // 反色切换：模拟墨水屏夜间模式，偏好存入 localStorage
+  var root = document.documentElement;
+  var saved = null;
+  try { saved = localStorage.getItem("ink-theme"); } catch (e) {}
+  if (saved) root.setAttribute("data-theme", saved);
+
+  document.getElementById("theme-toggle").addEventListener("click", function () {
+    var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+    root.setAttribute("data-theme", next);
+    try { localStorage.setItem("ink-theme", next); } catch (e) {}
+  });
+</script>
+</body>
+</html>
