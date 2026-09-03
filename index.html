@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>yuan-source</title>
-<meta name="description" content="yuan-source 的个人主页 —— 物理学方向独立研究者，研究小模型自进化与认知架构。墨水屏简约风格。">
+<title>yuan-source · 小模型自进化实验场</title>
+<meta name="description" content="yuan-source 的个人主页 —— 独立研究者，专注小模型自进化、混合架构与认知系统。墨水屏简约风格。">
 <style>
   :root {
     --paper: #f4f2ec;
@@ -14,9 +14,8 @@
     --line: #d9d5ca;
     --line-strong: #b8b3a6;
     --card: #faf9f5;
+    --accent: #6b4a3a;
   }
-
-  /* 暗色模式：模拟墨水屏反色 */
   html[data-theme="dark"] {
     --paper: #191917;
     --ink: #e8e6df;
@@ -25,10 +24,9 @@
     --line: #3a3833;
     --line-strong: #55524a;
     --card: #201f1d;
+    --accent: #c9a284;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: var(--paper);
     color: var(--ink);
@@ -36,323 +34,245 @@
     line-height: 1.8;
     font-size: clamp(15px, 0.4vw + 14px, 17px);
   }
-  html[lang="en"] body { letter-spacing: 0.01em; }
-
   ::selection { background: var(--ink); color: var(--paper); }
-
-  /* 纸张颗粒噪点，覆盖全屏，模拟墨水屏纹理 */
   body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 999;
-    opacity: 0.05;
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 999; opacity: 0.05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
   }
+  .wrap { max-width: 780px; margin: 0 auto; padding: clamp(24px, 4vw, 56px) clamp(20px, 4vw, 40px) 64px; }
 
-  .wrap {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: clamp(24px, 4vw, 56px) clamp(20px, 4vw, 40px) 64px;
-  }
-
-  /* ---------- 状态栏：模拟电子阅读器顶栏 ---------- */
   .statusbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    font-family: "SFMono-Regular", Consolas, "Courier New", monospace;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    color: var(--ink-faint);
-    border-top: 2px solid var(--ink);
-    border-bottom: 1px solid var(--line-strong);
-    padding: 8px 2px;
-    margin-bottom: clamp(44px, 6vw, 80px);
-    user-select: none;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    font-family: "SFMono-Regular", Consolas, "Courier New", monospace; font-size: 12px;
+    letter-spacing: 0.08em; color: var(--ink-faint);
+    border-top: 2px solid var(--ink); border-bottom: 1px solid var(--line-strong);
+    padding: 8px 2px; margin-bottom: clamp(44px, 6vw, 80px); user-select: none;
   }
   .statusbar .site { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .statusbar .ctrls { display: flex; align-items: center; gap: 12px; flex: none; }
   .statusbar button {
-    font: inherit;
-    font-family: inherit;
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    color: var(--ink);
-    background: transparent;
-    border: 1px solid var(--line-strong);
-    padding: 2px 10px;
-    cursor: pointer;
+    font: inherit; font-family: inherit; font-size: 12px; letter-spacing: 0.08em;
+    color: var(--ink); background: transparent; border: 1px solid var(--line-strong);
+    padding: 2px 10px; cursor: pointer;
   }
   .statusbar button:hover { background: var(--ink); color: var(--paper); }
 
-  /* ---------- 头部 ---------- */
-  header h1 {
-    font-size: clamp(38px, 5vw, 56px);
-    font-weight: 700;
-    letter-spacing: 0.01em;
-    line-height: 1.15;
-  }
+  header h1 { font-size: clamp(38px, 5vw, 54px); font-weight: 700; letter-spacing: 0.01em; line-height: 1.15; }
   header .role {
-    margin-top: 12px;
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 12px;
-    color: var(--ink-soft);
-    letter-spacing: 0.14em;
+    margin-top: 12px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px;
+    color: var(--ink-soft); letter-spacing: 0.14em;
   }
-  header p.bio {
-    margin-top: 22px;
-    color: var(--ink-soft);
-    max-width: 36em;
-  }
+  header p.bio { margin-top: 22px; color: var(--ink-soft); max-width: 38em; }
 
-  /* ---------- 墨点分隔线 ---------- */
   .dither {
-    border: 0;
-    height: 6px;
-    margin: clamp(36px, 5vw, 56px) 0;
+    border: 0; height: 6px; margin: clamp(32px, 5vw, 48px) 0;
     background-image: radial-gradient(var(--line-strong) 1px, transparent 1px);
-    background-size: 6px 6px;
-    background-position: center;
+    background-size: 6px 6px; background-position: center;
   }
 
-  /* ---------- 章节 ---------- */
   section h2 {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.16em;
-    margin-bottom: 24px;
+    display: flex; align-items: baseline; gap: 14px;
+    font-size: 16px; font-weight: 700; letter-spacing: 0.16em; margin-bottom: 20px;
   }
-  section h2 .no {
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 12px;
-    font-weight: 400;
-    color: var(--ink-faint);
-  }
-  section h2::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: var(--line-strong);
-  }
+  section h2 .no { font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; font-weight: 400; color: var(--ink-faint); }
+  section h2::after { content: ""; flex: 1; height: 1px; background: var(--line-strong); }
 
-  .about-list { list-style: none; }
-  .about-list li {
-    display: flex;
-    gap: 16px;
-    padding: 5px 0;
-    color: var(--ink-soft);
+  /* ---- 论文卡 ---- */
+  .paper-card { border: 1px solid var(--line-strong); background: var(--card); padding: 24px 26px 22px; }
+  .paper-card .badge {
+    display: inline-block; font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px;
+    letter-spacing: 0.12em; color: var(--paper); background: var(--ink);
+    padding: 2px 10px; margin-bottom: 14px;
   }
-  .about-list .k {
-    flex: 0 0 5.5em;
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 13px;
-    color: var(--ink-faint);
-    padding-top: 2px;
+  .paper-card h3 { font-size: 19px; font-weight: 700; line-height: 1.4; letter-spacing: 0.01em; }
+  .paper-card .meta { margin-top: 8px; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; color: var(--ink-faint); }
+  .paper-card .abstract { margin-top: 14px; font-size: 15px; color: var(--ink-soft); }
+  .paper-card .results {
+    margin-top: 16px; display: flex; flex-wrap: wrap; gap: 10px;
+    font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px;
   }
-  @media (max-width: 480px) {
-    .about-list li { flex-direction: column; gap: 2px; }
-    .about-list .k { flex-basis: auto; }
+  .paper-card .results .metric {
+    border: 1px solid var(--line-strong); padding: 6px 12px; color: var(--ink-soft);
   }
+  .paper-card .results .metric b { color: var(--ink); }
+  .paper-card .dl { display: inline-block; margin-top: 18px; border: 1px solid var(--ink); padding: 8px 22px; color: var(--ink); text-decoration: none; letter-spacing: 0.1em; }
+  .paper-card .dl:hover { background: var(--ink); color: var(--paper); }
 
-  /* ---------- 项目卡片 ---------- */
-  .projects { display: grid; gap: 14px; }
-  .project {
-    border: 1px solid var(--line-strong);
-    background: var(--card);
-    padding: 20px 22px 18px;
-  }
-  .project .head {
-    display: flex;
-    justify-content: space-between;
-    align-items: baseline;
-    gap: 12px;
-  }
-  .project h3 { font-size: 17px; font-weight: 700; letter-spacing: 0.02em; }
-  .project time {
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 12px;
-    color: var(--ink-faint);
-    white-space: nowrap;
-  }
-  .project p { margin-top: 8px; font-size: 15px; color: var(--ink-soft); }
-  .project .tags { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 8px; }
-  .tag {
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 11px;
-    letter-spacing: 0.06em;
-    color: var(--ink-soft);
-    border: 1px solid var(--line-strong);
-    padding: 1px 9px;
-    border-radius: 999px;
-  }
+  /* ---- 图表 ---- */
+  .figs { display: grid; gap: 16px; }
+  .fig { border: 1px solid var(--line); background: var(--card); padding: 14px; }
+  .fig img { width: 100%; height: auto; display: block; background: #fff; }
+  .fig .cap { margin-top: 8px; font-size: 13px; color: var(--ink-soft); }
+  .fig .cap .t { font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; color: var(--ink-faint); display: block; margin-bottom: 2px; }
+
+  /* ---- 项目 ---- */
+  .projects { display: grid; gap: 12px; }
+  .project { border: 1px solid var(--line-strong); background: var(--card); padding: 18px 20px 16px; }
+  .project .head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .project h3 { font-size: 16px; font-weight: 700; }
+  .project time { font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; color: var(--ink-faint); white-space: nowrap; }
+  .project p { margin-top: 6px; font-size: 14px; color: var(--ink-soft); }
+  .project .tags { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-family: "SFMono-Regular", Consolas, monospace; font-size: 11px; letter-spacing: 0.06em; color: var(--ink-soft); border: 1px solid var(--line-strong); padding: 1px 9px; border-radius: 999px; }
   a.project-link { color: inherit; text-decoration: none; display: block; }
-
-  /* 墨水屏式悬停：整卡反色，无过渡动画 */
   a.project-link:hover .project { background: var(--ink); }
-  a.project-link:hover .project h3,
-  a.project-link:hover .project p,
-  a.project-link:hover .project time,
-  a.project-link:hover .project .tag { color: var(--paper); }
+  a.project-link:hover .project h3, a.project-link:hover .project p, a.project-link:hover .project time, a.project-link:hover .project .tag { color: var(--paper); }
   a.project-link:hover .project .tag { border-color: var(--paper); }
-  a.project-link:hover .project time { opacity: 0.7; }
 
-  /* ---------- 笔记列表 ---------- */
+  /* ---- 笔记 ---- */
   .notes { list-style: none; }
-  .notes li {
-    display: flex;
-    gap: 18px;
-    align-items: baseline;
-    padding: 10px 0;
-    border-bottom: 1px dotted var(--line);
-  }
+  .notes li { display: flex; gap: 18px; align-items: baseline; padding: 9px 0; border-bottom: 1px dotted var(--line); }
   .notes li:last-child { border-bottom: 0; }
-  .notes time {
-    flex: 0 0 4.5em;
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 12px;
-    color: var(--ink-faint);
-  }
+  .notes time { flex: 0 0 4.5em; font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; color: var(--ink-faint); }
   .notes a { color: var(--ink); text-decoration: none; }
   .notes a:hover { text-decoration: underline; text-underline-offset: 4px; }
 
-  /* ---------- 联系方式 ---------- */
-  .contact {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px 24px;
-    align-items: baseline;
-  }
-  .contact a {
-    color: var(--ink);
-    text-decoration: none;
-    border-bottom: 1px solid var(--line-strong);
-    padding-bottom: 1px;
-  }
+  .contact { display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: baseline; }
+  .contact a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line-strong); padding-bottom: 1px; }
   .contact a:hover { border-bottom-color: var(--ink); }
   .contact .mono { font-family: "SFMono-Regular", Consolas, monospace; font-size: 14px; }
 
-  /* ---------- 页脚 ---------- */
   footer {
-    margin-top: clamp(56px, 7vw, 88px);
-    padding-top: 20px;
-    border-top: 2px solid var(--ink);
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-    font-family: "SFMono-Regular", Consolas, monospace;
-    font-size: 12px;
-    color: var(--ink-faint);
+    margin-top: clamp(52px, 7vw, 80px); padding-top: 20px; border-top: 2px solid var(--ink);
+    display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+    font-family: "SFMono-Regular", Consolas, monospace; font-size: 12px; color: var(--ink-faint);
   }
-
-  @media print {
-    body::before, .statusbar button { display: none; }
+  @media print { body::before, .statusbar button { display: none; } }
+  @media (max-width: 480px) {
+    .paper-card .results { flex-direction: column; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
 
-  <!-- 顶栏 -->
   <div class="statusbar">
     <span class="site">yuan-source-666.github.io</span>
     <span id="clock">--:--</span>
     <div class="ctrls">
-      <button id="lang-toggle" type="button" title="Switch language">EN</button>
       <button id="theme-toggle" type="button" title="切换反色">反转</button>
     </div>
   </div>
 
-  <!-- 头部 -->
   <header>
     <h1>yuan-source</h1>
-    <div class="role" data-i18n="role">PHYSICS · 独立研究者</div>
-    <p class="bio" data-i18n="bio">
-      物理学方向，业余以个人研究者的身份折腾小模型的"自进化"：
-      不训练权重，只靠程序侧架构，看有效智能能被推到多远。
-      相信智能不一定要以庞大的算力为前提，就像墨水屏不需要背光。
+    <div class="role">PHYSICS · 独立研究者 · 小模型自进化</div>
+    <p class="bio">
+      物理学方向，业余以个人研究者的身份折腾小模型的自训练与自进化：
+      用混合架构在纯 CPU 上从零训练可运行的小语言模型，
+      并给它们装上"欲望与恐惧"——一套源自稳态控制理论的驱动信号层，
+      让模型在训练中自己维持安全、趋近目标。
+      相信智能不必以庞大算力为前提，就像墨水屏不需要背光。
     </p>
   </header>
 
   <hr class="dither">
 
-  <!-- 关于 -->
   <section>
-    <h2><span class="no">01</span><span data-i18n="sec-about">关于</span></h2>
-    <ul class="about-list">
-      <li>
-        <span class="k" data-i18n="k-doing">正在做</span>
-        <span data-i18n="v-doing">单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。</span>
-      </li>
-      <li>
-        <span class="k" data-i18n="k-research">研究</span>
-        <span data-i18n="v-research">LLM 编排、结构动力学、认知架构三条路线的实证对比。</span>
-      </li>
-      <li>
-        <span class="k" data-i18n="k-tools">工具</span>
-        <span data-i18n="v-tools">Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。</span>
-      </li>
-    </ul>
+    <h2><span class="no">01</span>最新论文 · v8</h2>
+    <article class="paper-card">
+      <span class="badge">TECHNICAL REPORT · 2026-09</span>
+      <h3>v8: A CPU-Trainable Small Language Model with Hybrid Mamba–Transformer Architecture and Homeostatic Drive Signals</h3>
+      <div class="meta">Siyuan Xing · yuan-source-666 · 8 pages · 中英文双语总结</div>
+      <p class="abstract">
+        在纯 CPU 上从零训练的混合架构小模型（Mamba-2 + Transformer，GQA / RoPE / SwiGLU / RMSNorm），
+        完整走通 预训练 → SFT → DPO → 自一致性采样 全链路；并提出 <b>稳态驱动信号层</b>：
+        内部状态（资源/能量/一致性/安全边距/欲望/恐惧）随训练动态演化，
+        以"偏差—欲望—恐惧"信号作为内在奖励与损失正则，恐惧越界时自动刹住学习率。
+      </p>
+      <div class="results">
+        <div class="metric">验证损失 <b>2.463</b> <span style="color:var(--ink-faint)">（drives）</span></div>
+        <div class="metric">验证损失 <b>2.616</b> <span style="color:var(--ink-faint)">（baseline）</span></div>
+        <div class="metric">相对提升 <b>−5.9%</b></div>
+        <div class="metric">困惑度 <b>13.68 → 11.74</b></div>
+        <div class="metric">参数量 <b>7.67M</b> · CPU only</div>
+      </div>
+      <a class="dl" href="assets/v8-paper.pdf" target="_blank" rel="noopener">下载论文 PDF</a>
+    </article>
   </section>
 
   <hr class="dither">
 
-  <!-- 项目 -->
   <section>
-    <h2><span class="no">02</span><span data-i18n="sec-projects">项目</span></h2>
+    <h2><span class="no">02</span>实验数据</h2>
+    <div class="figs">
+      <figure class="fig">
+        <span class="cap"><span class="t">FIG. 1</span>预训练损失：baseline vs drive-enabled（7.7M / CPU / 400 步）</span>
+        <img src="assets/loss_curve.png" alt="预训练损失曲线对比">
+        <figcaption class="cap">驱动层的正则项让训练损失略高，但换来了更好的泛化。</figcaption>
+      </figure>
+      <figure class="fig">
+        <span class="cap"><span class="t">FIG. 2</span>驱动信号动态：能量耗尽、偏差与欲望升到稳态、恐惧恒为 0（无越界）、一致性随训练回升</span>
+        <img src="assets/drive_signals.png" alt="驱动信号动态">
+        <figcaption class="cap">模型在训练中"自我调节"：趋近目标（欲望）、守住边界（恐惧=0）。</figcaption>
+      </figure>
+      <figure class="fig">
+        <span class="cap"><span class="t">FIG. 3</span>最终验证损失与困惑度对比</span>
+        <img src="assets/val_compare.png" alt="验证损失对比">
+        <figcaption class="cap">驱动信号层在同等条件下将验证损失从 2.616 降至 2.463。</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <hr class="dither">
+
+  <section>
+    <h2><span class="no">03</span>项目</h2>
     <div class="projects">
-      <a class="project-link" href="https://github.com/yuan-source-666/second-brain" target="_blank" rel="noopener">
+      <a class="project-link" href="https://github.com/yuan-source-666/v8" target="_blank" rel="noopener">
         <article class="project">
-          <div class="head">
-            <h3 data-i18n="p4-title">second-brain · 第二大脑</h3>
-            <time data-i18n="p4-time">2026 · 知识系统 + DSH 预设</time>
-          </div>
-          <p data-i18n="p4-desc">个人知识管理系统：不可变原始资料 + 分层知识/关系/洞察，附 DeepSeek Harness 第二大脑 Agent 预设（INGEST/LINK/LINT）。</p>
-          <div class="tags">
-            <span class="tag" data-i18n="p4-t1">知识管理</span><span class="tag" data-i18n="p4-t2">DSH 预设</span>
-          </div>
+          <div class="head"><h3>v8 · 本地自训小 LLM</h3><time>2026 · 论文配套</time></div>
+          <p>Hybrid Mamba-Transformer 底座 + 稳态驱动信号层，纯 CPU 可训练，预训练→SFT→DPO→自进化闭环全链路。</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">PyTorch</span><span class="tag">Mamba-2</span><span class="tag">CPU-only</span></div>
         </article>
       </a>
       <a class="project-link" href="https://github.com/yuan-source-666/agi-research-evolution-os" target="_blank" rel="noopener">
         <article class="project">
-          <div class="head">
-            <h3>agi-research-evolution-os</h3>
-            <time data-i18n="p1-time">2026 · 论文配套</time>
-          </div>
-          <p data-i18n="p1-desc">LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现"改进—回归—检测—回滚—恢复"安全行为链。</p>
-          <div class="tags">
-            <span class="tag">Python</span><span class="tag">Qwen2.5</span><span class="tag" data-i18n="p1-t3">SCNet 超算</span>
-          </div>
+          <div class="head"><h3>agi-research-evolution-os</h3><time>2026 · 自进化实验</time></div>
+          <p>小模型自进化实验 OS：在 DCU 上用程序侧架构（工具调用/反思循环/进化提案器）探索自进化，565 个实验文件。</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">DCU</span><span class="tag">Self-evolution</span></div>
         </article>
       </a>
-      <a class="project-link" href="#">
+      <a class="project-link" href="https://github.com/yuan-source-666/AGI-Core" target="_blank" rel="noopener">
         <article class="project">
-          <div class="head">
-            <h3 data-i18n="p2-title">基元社会 · PRIMORDIA</h3>
-            <time data-i18n="p2-time">2026 · 第三代迭代</time>
-          </div>
-          <p data-i18n="p2-desc">无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了"宏工具配方"。</p>
-          <div class="tags">
-            <span class="tag" data-i18n="p2-t1">结构动力学</span><span class="tag" data-i18n="p2-t2">涌现</span>
-          </div>
+          <div class="head"><h3>AGI-Core</h3><time>2026 · 多智能体原型</time></div>
+          <p>多智能体协作构建的 AGI 原型：多模态感知 + 认知核心（记忆/注意力/推理）+ 系统集成，五份设计文档齐备。</p>
+          <div class="tags"><span class="tag">Python</span><span class="tag">多智能体</span><span class="tag">认知架构</span></div>
         </article>
       </a>
-      <a class="project-link" href="#">
+      <a class="project-link" href="https://github.com/yuan-source-666/second-brain" target="_blank" rel="noopener">
         <article class="project">
-          <div class="head">
-            <h3 data-i18n="p3-title">认知架构五件套</h3>
-            <time data-i18n="p3-time">2026 · 参考实现</time>
-          </div>
-          <p data-i18n="p3-desc">持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。</p>
-          <div class="tags">
-            <span class="tag" data-i18n="p3-t1">认知架构</span><span class="tag" data-i18n="p3-t2">持续学习</span>
-          </div>
+          <div class="head"><h3>second-brain · 第二大脑</h3><time>2026 · 知识系统 + DSH 预设</time></div>
+          <p>个人知识管理系统：不可变原始资料（SHA-256 校验）+ 知识/关系/洞察分层演化，附 DeepSeek Harness Agent 预设。</p>
+          <div class="tags"><span class="tag">知识管理</span><span class="tag">DSH 预设</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="https://github.com/yuan-source-666/dsh-github-manager" target="_blank" rel="noopener">
+        <article class="project">
+          <div class="head"><h3>dsh-github-manager</h3><time>2026 · DSH 插件</time></div>
+          <p>GitHub 仓库 AI 自动管理通道：27 个工具（Issue/PR/分支/文件/标签/Release）+ Web 设置卡 + dry-run 防护。</p>
+          <div class="tags"><span class="tag">JavaScript</span><span class="tag">DeepSeek Harness</span><span class="tag">插件</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="https://github.com/yuan-source-666/dsh-research-autoresearch" target="_blank" rel="noopener">
+        <article class="project">
+          <div class="head"><h3>dsh-research-autoresearch</h3><time>2026 · DSH 插件</time></div>
+          <p>科研自动化全家桶：arXiv 检索 + LQS 五维评分 + 停滞红绿灯 + 五人格中位数评审 + 可视化总控台。</p>
+          <div class="tags"><span class="tag">科研</span><span class="tag">arXiv</span><span class="tag">LQS</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="https://github.com/yuan-source-666/dsh-task-notifier" target="_blank" rel="noopener">
+        <article class="project">
+          <div class="head"><h3>dsh-task-notifier</h3><time>2026 · npm 已发布</time></div>
+          <p>DeepSeek Harness 任务完成 OS 通知插件：turn/subagent/后台任务完成即推送，多语言 + 自定义命令。</p>
+          <div class="tags"><span class="tag">JavaScript</span><span class="tag">npm</span><span class="tag">通知</span></div>
+        </article>
+      </a>
+      <a class="project-link" href="https://github.com/yuan-source-666/html-animations" target="_blank" rel="noopener">
+        <article class="project">
+          <div class="head"><h3>html-animations</h3><time>2026 · 动画</time></div>
+          <p>HTML 动画演示合集。</p>
+          <div class="tags"><span class="tag">HTML</span><span class="tag">动画</span></div>
         </article>
       </a>
     </div>
@@ -360,145 +280,49 @@
 
   <hr class="dither">
 
-  <!-- 近期笔记 -->
   <section>
-    <h2><span class="no">03</span><span data-i18n="sec-notes">近期笔记</span></h2>
+    <h2><span class="no">04</span>更新</h2>
     <ul class="notes">
-      <li><time>2026-08</time><a href="#" data-i18n="note1">完成论文期刊投稿版：小模型自进化的三条程序侧架构路线</a></li>
-      <li><time>2026-02</time><a href="#" data-i18n="note2">在 SCNet 海光 DCU 上跑通第一条自进化循环</a></li>
+      <li><time>2026-09</time><a href="assets/v8-paper.pdf" target="_blank" rel="noopener">v8 技术报告完成：混合架构 + 稳态驱动信号层，验证损失 -5.9%</a></li>
+      <li><time>2026-09</time><a href="https://github.com/yuan-source-666/v8" target="_blank" rel="noopener">v8 全仓库改用 CC BY-NC 4.0 许可（禁止商用）</a></li>
+      <li><time>2026-08</time><a href="https://github.com/yuan-source-666/AGI-Core" target="_blank" rel="noopener">AGI-Core 多智能体原型：多模态感知 + 认知核心</a></li>
     </ul>
   </section>
 
   <hr class="dither">
 
-  <!-- 联系 -->
   <section>
-    <h2><span class="no">04</span><span data-i18n="sec-contact">联系</span></h2>
+    <h2><span class="no">05</span>联系</h2>
     <div class="contact">
       <a href="https://github.com/yuan-source-666" target="_blank" rel="noopener">GitHub</a>
       <a href="https://yuan-source-666.github.io/" target="_blank" rel="noopener">主页</a>
     </div>
   </section>
 
-  <!-- 页脚 -->
   <footer>
     <span>© 2026 yuan-source</span>
-    <span data-i18n="foot-right">EPD · 300 DPI · 无闪烁渲染</span>
+    <span>CC BY-NC 4.0 · 墨水屏 · 无背光渲染</span>
   </footer>
 
 </div>
 
 <script>
-  // ---------- 双语文案 ----------
-  var I18N = {
-    zh: {
-      "role": "PHYSICS · 独立研究者",
-      "bio": "物理学方向，业余以个人研究者的身份折腾小模型的\"自进化\"：不训练权重，只靠程序侧架构，看有效智能能被推到多远。相信智能不一定要以庞大的算力为前提，就像墨水屏不需要背光。",
-      "sec-about": "关于",
-      "k-doing": "正在做", "v-doing": "单作者论文《小模型自进化的三条程序侧架构路线》整理投稿中。",
-      "k-research": "研究", "v-research": "LLM 编排、结构动力学、认知架构三条路线的实证对比。",
-      "k-tools": "工具", "v-tools": "Obsidian 写作，SCNet 超算跑实验，Qwen2.5 当认知核心。",
-      "sec-projects": "项目",
-      "p1-time": "2026 · 论文配套",
-      "p1-desc": "LLM 编排式自进化系统：九层进化回路 + 反思循环 + 基准门自动回滚。带校验任务成功率从 0.500 提升至 0.825，并完整出现\"改进—回归—检测—回滚—恢复\"安全行为链。",
-      "p1-t3": "SCNet 超算",
-      "p2-title": "基元社会 · PRIMORDIA", "p2-time": "2026 · 第三代迭代",
-      "p2-desc": "无中心、无权重、无 LLM 的结构动力学系统，仅靠均值场交互与五条自然规则运行，在 3000 周期内自发固化了\"宏工具配方\"。",
-      "p2-t1": "结构动力学", "p2-t2": "涌现",
-      "p3-title": "认知架构五件套", "p3-time": "2026 · 参考实现",
-      "p3-desc": "持续学习、分层记忆、世界模型、元认知与内生动机五个正交部件的可复现实现，通过全部 14 项单元测试。",
-      "p3-t1": "认知架构", "p3-t2": "持续学习",
-      "p4-title": "second-brain · 第二大脑", "p4-time": "2026 · 知识系统 + DSH 预设",
-      "p4-desc": "个人知识管理系统：不可变原始资料 + 分层知识/关系/洞察，附 DeepSeek Harness 第二大脑 Agent 预设（INGEST/LINK/LINT）。",
-      "p4-t1": "知识管理", "p4-t2": "DSH 预设",
-      "sec-notes": "近期笔记",
-      "note1": "完成论文期刊投稿版：小模型自进化的三条程序侧架构路线",
-      "note2": "在 SCNet 海光 DCU 上跑通第一条自进化循环",
-      "sec-contact": "联系",
-      "foot-right": "EPD · 300 DPI · 无闪烁渲染",
-      "theme-label": "反转", "theme-title": "切换反色",
-      "lang-label": "EN", "lang-title": "Switch to English"
-    },
-    en: {
-      "role": "PHYSICS · INDEPENDENT RESEARCHER",
-      "bio": "A physics student and independent researcher tinkering with \"self-evolving\" small models in spare time: no weight training, only program-side architecture, to see how far effective intelligence can be pushed. I believe intelligence need not presuppose massive compute — just as e-ink needs no backlight.",
-      "sec-about": "About",
-      "k-doing": "Now", "v-doing": "Single-author paper \"Three Program-Side Architecture Routes Toward Small-Model Self-Evolution\" in preparation for submission.",
-      "k-research": "Research", "v-research": "Empirical comparison of three routes: LLM orchestration, structural dynamics, and cognitive architecture.",
-      "k-tools": "Toolkit", "v-tools": "Writing in Obsidian, experimenting on the SCNet supercomputer, Qwen2.5 as the cognitive core.",
-      "sec-projects": "Projects",
-      "p1-time": "2026 · Paper companion",
-      "p1-desc": "LLM-orchestrated self-evolving system: nine-level evolution loop + reflection cycle + benchmark gate with automatic rollback. Success rate on verification-guarded tasks rose from 0.500 to 0.825, exhibiting the full safety chain of improvement–regression–detection–rollback–recovery.",
-      "p1-t3": "SCNet DCU",
-      "p2-title": "Society of Primitives · PRIMORDIA", "p2-time": "2026 · Third generation",
-      "p2-desc": "A centerless, weight-free, LLM-free structural-dynamics system driven only by mean-field interaction and five natural rules; it spontaneously consolidated \"macro-tool recipes\" within 3000 cycles.",
-      "p2-t1": "Structural dynamics", "p2-t2": "Emergence",
-      "p3-title": "Cognitive Architecture Quintet", "p3-time": "2026 · Reference impl.",
-      "p3-desc": "A reproducible implementation of five orthogonal components — continual learning, hierarchical memory, world model, metacognition, and intrinsic motivation — passing all 14 unit tests.",
-      "p3-t1": "Cognitive architecture", "p3-t2": "Continual learning",
-      "p4-title": "second-brain · Second Brain", "p4-time": "2026 · Knowledge system + DSH preset",
-      "p4-desc": "A personal knowledge system: immutable sources + layered knowledge/relations/insights, shipped with a DeepSeek Harness Second Brain agent preset (INGEST/LINK/LINT).",
-      "p4-t1": "Knowledge mgmt", "p4-t2": "DSH preset",
-      "sec-notes": "Notes",
-      "note1": "Finished the journal submission draft: three program-side architecture routes toward small-model self-evolution",
-      "note2": "Ran the first self-evolution loop on a Hygon DCU instance on SCNet",
-      "sec-contact": "Contact",
-      "foot-right": "EPD · 300 DPI · Flicker-free",
-      "theme-label": "Invert", "theme-title": "Toggle inverted mode",
-      "lang-label": "中文", "lang-title": "切换为中文"
-    }
-  };
-
   var root = document.documentElement;
-
-  function store(key, val) { try { localStorage.setItem(key, val); } catch (e) {} }
-  function load(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
-
-  // ---------- 语言切换：默认中文 ----------
-  var lang = load("ink-lang") === "en" ? "en" : "zh";
-
-  function applyLang(l) {
-    lang = l;
-    root.setAttribute("lang", l === "en" ? "en" : "zh-CN");
-    var dict = I18N[l];
-    document.querySelectorAll("[data-i18n]").forEach(function (el) {
-      var key = el.getAttribute("data-i18n");
-      if (dict[key] != null) el.textContent = dict[key];
-    });
-    document.getElementById("lang-toggle").textContent = dict["lang-label"];
-    document.getElementById("lang-toggle").title = dict["lang-title"];
-    document.getElementById("theme-toggle").textContent = dict["theme-label"];
-    document.getElementById("theme-toggle").title = dict["theme-title"];
-    document.title = "yuan-source";
-    store("ink-lang", l);
-  }
-
-  document.getElementById("lang-toggle").addEventListener("click", function () {
-    applyLang(lang === "zh" ? "en" : "zh");
-  });
-
-  // ---------- 时钟 ----------
-  function tick() {
-    var d = new Date();
-    var pad = function (n) { return String(n).padStart(2, "0"); };
-    document.getElementById("clock").textContent =
-      pad(d.getHours()) + ":" + pad(d.getMinutes());
-  }
-  tick();
-  setInterval(tick, 30000);
-
-  // ---------- 反色切换：模拟墨水屏夜间模式 ----------
-  var savedTheme = load("ink-theme");
-  if (savedTheme) root.setAttribute("data-theme", savedTheme);
-
+  function store(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+  var saved = load("ink-theme");
+  if (saved) root.setAttribute("data-theme", saved);
   document.getElementById("theme-toggle").addEventListener("click", function () {
     var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
     root.setAttribute("data-theme", next);
     store("ink-theme", next);
   });
-
-  // 初始化语言
-  applyLang(lang);
+  function tick() {
+    var d = new Date();
+    var pad = function (n) { return String(n).padStart(2, "0"); };
+    document.getElementById("clock").textContent = pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+  tick(); setInterval(tick, 30000);
 </script>
 </body>
 </html>
