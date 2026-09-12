@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我的第一篇文章 · 阿源的小站</title>
+  <script src="../../assets/theme.js"></script>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="../../index.html">阿源<em>小站</em></a>
+      <nav class="main-nav">
+        <a href="../../index.html"><span class="no">01</span>主页</a>
+        <a href="../index.html" class="active"><span class="no">02</span>博客</a>
+        <a href="../../nav.html"><span class="no">03</span>网址导航</a>
+      </nav>
+      <button class="theme-toggle" type="button"></button>
+    </div>
+  </header>
+
+  <div class="container">
+    <article class="article">
+      <a class="back-link" href="../index.html">← 返回文章列表</a>
+      <p class="kicker">Essay · 随笔</p>
+      <h1>我的第一篇文章：网站正式上线啦 🎉</h1>
+      <div class="post-meta">2026-08-29 · 随笔</div>
+
+      <p>
+        这是这个网站的第一篇文章。从今天起，我在互联网上有了完全属于自己的角落：
+        一个介绍自己的主页、一个用来记录想法的博客，还有一个每天都用得上的网址导航页。
+      </p>
+
+      <h2>网站是怎么搭起来的</h2>
+      <p>
+        整个网站没有用任何框架，就是最朴素的 HTML + CSS + JavaScript，
+        所以打开速度很快，改起来也很直观。目录结构长这样：
+      </p>
+      <pre><code>my-website/
+├── index.html          个人主页（名片）
+├── nav.html            网址导航页（可在页面上直接增删网址）
+├── blog/
+│   ├── index.html      博客文章列表
+│   └── posts/          文章都放在这里
+└── assets/
+    ├── style.css       全站样式（极简黑白 · 杂志排版）
+    ├── theme.js        亮 / 暗主题切换
+    ├── site-data.js    站点信息（名字、简介、联系方式）
+    ├── nav-data.js     网址导航的种子数据
+    └── posts-data.js   博客文章列表数据</code></pre>
+
+      <h2>接下来打算写什么</h2>
+      <p>计划不定太高大上，想到什么写什么，比如：</p>
+      <ul>
+        <li>工作和学习中踩过的坑、解决过程；</li>
+        <li>好用的小工具、软件推荐；</li>
+        <li>一些生活记录和随手拍。</li>
+      </ul>
+
+      <h2>怎么发新文章</h2>
+      <p>
+        在 <code>blog/posts/</code> 里复制一份这篇文章改名，写好内容，
+        然后到 <code>assets/posts-data.js</code> 里加一条记录，首页和博客列表就会自动出现它。
+      </p>
+
+      <p>好了，第一篇就写到这里，欢迎常来逛逛 🙂</p>
+    </article>
+  </div>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© 2026 阿源的小站</span>
+      <span><a href="../../index.html">回到主页</a></span>
+    </div>
+  </footer>
+</body>
+</html>

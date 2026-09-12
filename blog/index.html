@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>博客 · 阿源的小站</title>
+  <script src="../assets/theme.js"></script>
+  <link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="../index.html">阿源<em id="logo-accent">小站</em></a>
+      <nav class="main-nav">
+        <a href="../index.html"><span class="no">01</span>主页</a>
+        <a href="index.html" class="active"><span class="no">02</span>博客</a>
+        <a href="../nav.html"><span class="no">03</span>网址导航</a>
+      </nav>
+      <button class="theme-toggle" type="button"></button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="section">
+      <p class="kicker">Writing · 全部文章</p>
+      <h1 class="section-title">博客</h1>
+      <p class="section-lede">文章列表由 <code>assets/posts-data.js</code> 自动生成，最新文章也会出现在<a href="../index.html">主页</a>。</p>
+      <div class="post-list" id="post-list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© 2026 阿源的小站</span>
+      <span><a href="../index.html">回到主页</a></span>
+    </div>
+  </footer>
+
+  <script src="../assets/site-data.js"></script>
+  <script src="../assets/posts-data.js"></script>
+  <script>
+    var list = document.getElementById("post-list");
+    list.innerHTML = POSTS.map(function (p) {
+      return (
+        '<a class="post-row" href="' + p.file + '">' +
+        '<span class="post-row-date">' + p.date + "</span>" +
+        '<span><span class="post-row-title">' + p.title + "</span>" +
+        '<span class="post-row-summary">' + p.summary + "</span></span>" +
+        '<span class="post-row-tags">' + p.tags.join(" / ") + "</span>" +
+        "</a>"
+      );
+    }).join("");
+  </script>
+</body>
+</html>

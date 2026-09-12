@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>网址导航 · 阿源的小站</title>
+  <script src="assets/theme.js"></script>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="logo" href="index.html">阿源<em id="logo-accent">小站</em></a>
+      <nav class="main-nav">
+        <a href="index.html"><span class="no">01</span>主页</a>
+        <a href="blog/index.html"><span class="no">02</span>博客</a>
+        <a href="nav.html" class="active"><span class="no">03</span>网址导航</a>
+      </nav>
+      <button class="theme-toggle" type="button"></button>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="nav-toolbar">
+      <div class="greeting" id="greeting-box" style="min-width:170px">
+        <div class="kicker" style="margin-bottom:2px" id="helloText">你好</div>
+        <div style="font-size:12.5px;color:var(--text-faint);font-family:var(--mono)" id="clockText"></div>
+      </div>
+      <div class="nav-search">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+        <input id="nav-search" type="text" placeholder="搜索网址…（Enter 打开第一个结果，/ 聚焦）" autocomplete="off" />
+      </div>
+      <div class="nav-actions">
+        <button class="btn solid" id="btnAddLink" type="button">＋ 添加网址</button>
+        <button class="btn" id="btnSettings" type="button" title="设置">设置</button>
+      </div>
+    </div>
+
+    <div id="nav-main"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>网址数据保存在本浏览器 · 记得在「设置」里定期导出备份</span>
+      <span>快捷键：<kbd>/</kbd> 搜索 · <kbd>Esc</kbd> 清空</span>
+    </div>
+  </footer>
+
+  <!-- 添加/编辑网址 弹窗 -->
+  <div class="modal-mask" id="linkModal">
+    <div class="modal">
+      <h3 id="linkModalTitle">添加网址</h3>
+      <div class="form-row">
+        <label>名称 *</label>
+        <input id="fName" type="text" placeholder="例如：GitHub" />
+      </div>
+      <div class="form-row">
+        <label>网址 *</label>
+        <input id="fUrl" type="text" placeholder="例如：github.com" />
+      </div>
+      <div class="form-row">
+        <label>备注（可选）</label>
+        <input id="fDesc" type="text" placeholder="一句话描述" />
+      </div>
+      <div class="form-row">
+        <label>所属分类</label>
+        <select id="fCat"></select>
+      </div>
+      <div class="form-row">
+        <label>图标（可选）</label>
+        <input id="fIcon" type="text" placeholder="留空自动获取网站图标；也可填图片链接或 emoji" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-close type="button">取消</button>
+        <button class="btn solid" id="btnSaveLink" type="button">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 添加/编辑分类 弹窗 -->
+  <div class="modal-mask" id="catModal">
+    <div class="modal">
+      <h3 id="catModalTitle">新建分类</h3>
+      <div class="form-row">
+        <label>分类名称 *</label>
+        <input id="cName" type="text" placeholder="例如：常用工具" />
+      </div>
+      <div class="form-row">
+        <label>图标（emoji）</label>
+        <input id="cIcon" type="text" placeholder="例如：🛠️" maxlength="4" />
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-close type="button">取消</button>
+        <button class="btn solid" id="btnSaveCat" type="button">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 设置 弹窗 -->
+  <div class="modal-mask" id="setModal">
+    <div class="modal">
+      <h3>设置</h3>
+      <div class="switch-row">
+        <span>显示时钟与问候语</span>
+        <label class="switch"><input type="checkbox" id="sClock" checked /><span class="slider"></span></label>
+      </div>
+      <div class="form-row" style="margin-top:14px">
+        <label>数据备份</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn" id="btnExport" type="button">导出 JSON</button>
+          <button class="btn" id="btnImport" type="button">导入 JSON</button>
+          <button class="btn danger" id="btnReset" type="button">恢复默认</button>
+        </div>
+        <div class="form-hint">数据仅保存在当前浏览器，建议定期导出备份文件</div>
+      </div>
+      <input type="file" id="importFile" accept=".json" style="display:none" />
+      <div class="modal-footer">
+        <button class="btn" data-close type="button">关闭</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast"></div>
+
+  <script src="assets/site-data.js?v=2"></script>
+  <!-- nav-data.js 作为首次访问的种子数据；之后数据存在 localStorage，可在页面上直接增删改 -->
+  <script src="assets/nav-data.js?v=2"></script>
+  <script>
+    "use strict";
+    /* ===================================================================
+       网址导航 · 动态内核（移植自 personal-nav 单文件应用）
+       功能：分类/网址增删改查、拖拽排序、搜索高亮、导入导出、时钟
+       =================================================================== */
+    const STORE_KEY = "my-website-nav-v1";
+    const $ = (s) => document.querySelector(s);
+    const $$ = (s) => document.querySelectorAll(s);
+
+    function uid() {
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+    }
+    function esc(s) {
+      return String(s ?? "").replace(/[&<>"']/g, (c) =>
+        ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+    function normUrl(u) {
+      u = (u || "").trim();
+      if (!u) return "";
+      if (!/^https?:\/\//i.test(u)) u = "https://" + u;
+      return u;
+    }
+    function domainOf(u) {
+      try { return new URL(normUrl(u)).hostname; } catch (e) { return ""; }
+    }
+    function isEmoji(s) {
+      return s && [...s].length <= 2 && /\p{Extended_Pictographic}/u.test(s);
+    }
+
+    /* 把老版 nav-data.js（数组分类 + emoji 前缀）转成导航内核的 state 作为种子 */
+    function seedFromNavData() {
+      const mk = (name, icon, links) => ({
+        id: uid(), name, icon,
+        links: links.map((l) => ({ id: uid(), name: l.name, url: l.url, desc: l.desc || "", icon: "" })),
+      });
+      const cats = (typeof NAV_DATA !== "undefined" ? NAV_DATA : []).map((g) => {
+        const m = String(g.category).match(/^(\p{Extended_Pictographic}|\p{Emoji_Presentation})\s*/u);
+        const icon = m ? m[1] : "📁";
+        const name = String(g.category).replace(/^(\p{Extended_Pictographic}|\p{Emoji_Presentation})\s*/u, "").trim();
+        return mk(name || g.category, icon, g.sites);
+      });
+      return { version: 1, settings: { showClock: true }, categories: cats };
+    }
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(STORE_KEY);
+        if (raw) {
+          const data = JSON.parse(raw);
+          if (data && Array.isArray(data.categories)) return data;
+        }
+      } catch (e) { console.warn("读取导航数据失败，使用种子数据", e); }
+      return seedFromNavData();
+    }
+
+    let state = load();
+    let dragInfo = null;
+
+    function save() { localStorage.setItem(STORE_KEY, JSON.stringify(state)); }
+    function findCat(id) { return state.categories.find((c) => c.id === id); }
+    function findLink(id) {
+      for (const c of state.categories) {
+        const l = c.links.find((x) => x.id === id);
+        if (l) return { cat: c, link: l };
+      }
+      return null;
+    }
+
+    /* ===== Toast ===== */
+    let toastTimer = null;
+    function toast(msg) {
+      const t = $("#toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+    }
+
+    /* ===== 图标 ===== */
+    function iconHTML(link) {
+      if (link.icon && isEmoji(link.icon)) {
+        return `<span class="link-icon">${esc(link.icon)}</span>`;
+      }
+      if (link.icon) {
+        return `<span class="link-icon" data-letter="🔗"><img src="${esc(link.icon)}" alt=""
+          onerror="this.parentNode.textContent='🔗'"></span>`;
+      }
+      const d = domainOf(link.url);
+      if (d) {
+        const letter = esc((link.name || "?")[0].toUpperCase());
+        return `<span class="link-icon" data-letter="${letter}"><img src="https://favicon.im/${esc(d)}?larger=true" alt=""
+          onerror="this.parentNode.textContent=this.parentNode.dataset.letter"></span>`;
+      }
+      return `<span class="link-icon">${esc((link.name || "?")[0].toUpperCase())}</span>`;
+    }
+
+    /* ===== 时钟 ===== */
+    function tickClock() {
+      const box = $("#greeting-box");
+      if (!state.settings.showClock) { box.style.display = "none"; return; }
+      box.style.display = "";
+      const now = new Date();
+      const w = "日一二三四五六"[now.getDay()];
+      $("#clockText").textContent =
+        `${now.getFullYear()}.${String(now.getMonth() + 1).padStart(2, "0")}.${String(now.getDate()).padStart(2, "0")} 周${w} ` +
+        `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const h = now.getHours();
+      $("#helloText").textContent =
+        h < 6 ? "夜深了" : h < 12 ? "早上好" : h < 14 ? "中午好" : h < 18 ? "下午好" : "晚上好";
+    }
+    setInterval(tickClock, 1000 * 30);
+
+    /* ===== 渲染 ===== */
+    function render() {
+      const q = $("#nav-search").value.trim().toLowerCase();
+      if (q) renderSearch(q);
+      else renderCategories();
+    }
+
+    function linkCardHTML(cat, link) {
+      return `<a class="link-card" draggable="true" data-cat="${cat.id}" data-link="${link.id}"
+        href="${esc(normUrl(link.url))}" target="_blank" rel="noopener"
+        title="${esc(link.desc || link.url)}">
+        ${iconHTML(link)}
+        <div class="link-info">
+          <div class="link-name">${esc(link.name)}</div>
+          ${link.desc ? `<div class="link-desc">${esc(link.desc)}</div>` : ""}
+        </div>
+        <div class="link-tools">
+          <button class="icon-btn" data-act="edit-link" title="编辑">✎</button>
+          <button class="icon-btn" data-act="del-link" title="删除">✕</button>
+        </div>
+      </a>`;
+    }
+
+    function renderCategories() {
+      const main = $("#nav-main");
+      if (!state.categories.length) {
+        main.innerHTML = `<div class="empty-hint"><div class="big">🧭</div>
+          还没有分类，点右上角「＋ 添加网址」或先新建一个分类<br><br>
+          <button class="btn solid" id="btnNewCatEmpty" type="button">＋ 新建分类</button></div>`;
+        const b = $("#btnNewCatEmpty");
+        if (b) b.onclick = () => openCatModal(null);
+        return;
+      }
+      let html = state.categories
+        .map((cat) => {
+          const cards = cat.links.map((l) => linkCardHTML(cat, l)).join("");
+          return `<section class="nav-category" data-cat="${cat.id}">
+            <div class="cat-header" draggable="true" data-drag-cat="${cat.id}">
+              <div class="cat-title"><span class="cat-icon">${esc(cat.icon || "📁")}</span>${esc(cat.name)}
+                <span class="cat-count">${cat.links.length}</span>
+              </div>
+              <div class="cat-actions">
+                <button class="icon-btn" data-act="add-in-cat" data-cat="${cat.id}" title="在此分类添加网址">＋</button>
+                <button class="icon-btn" data-act="edit-cat" data-cat="${cat.id}" title="编辑分类">✎</button>
+                <button class="icon-btn" data-act="del-cat" data-cat="${cat.id}" title="删除分类">✕</button>
+              </div>
+            </div>
+            <div class="links-grid" data-drop-cat="${cat.id}">
+              ${cards}
+              <button class="add-card" data-act="add-in-cat" data-cat="${cat.id}" type="button">＋ 添加</button>
+            </div>
+          </section>`;
+        })
+        .join("");
+      html += `<div style="margin-top:-14px"><button class="btn" id="btnNewCat" type="button">＋ 新建分类</button></div>`;
+      main.innerHTML = html;
+      const b = $("#btnNewCat");
+      if (b) b.onclick = () => openCatModal(null);
+    }
+
+    function highlight(text, q) {
+      const idx = text.toLowerCase().indexOf(q);
+      if (idx === -1) return esc(text);
+      return (
+        esc(text.slice(0, idx)) +
+        "<mark>" + esc(text.slice(idx, idx + q.length)) + "</mark>" +
+        esc(text.slice(idx + q.length))
+      );
+    }
+
+    function renderSearch(q) {
+      const main = $("#nav-main");
+      const results = [];
+      for (const c of state.categories)
+        for (const l of c.links)
+          if ((l.name + " " + (l.desc || "") + " " + l.url).toLowerCase().includes(q))
+            results.push({ c, l });
+      if (!results.length) {
+        main.innerHTML = `<div class="empty-hint"><div class="big">🔍</div>没有找到匹配「${esc(q)}」的网址</div>`;
+        return;
+      }
+      const cards = results
+        .map(({ c, l }) =>
+          linkCardHTML(c, l).replace(/class="link-name">([^<]*)</g, (m, name) => `class="link-name">${highlight(name, q)}<`)
+        )
+        .join("");
+      main.innerHTML = `<div class="result-line">搜索结果 · ${results.length} 条 · ENTER 打开第一条</div>
+        <div class="links-grid" id="searchGrid">${cards}</div>`;
+      $("#nav-search").onkeydown = (e) => {
+        if (e.key === "Enter" && results.length) window.open(normUrl(results[0].l.url), "_blank");
+      };
+    }
+
+    /* ===== 弹窗通用 ===== */
+    function openModal(id) {
+      $(id).classList.add("open");
+      const inp = $(id).querySelector("input");
+      if (inp) setTimeout(() => inp.focus(), 50);
+    }
+    function closeModal(el) { el.classList.remove("open"); }
+    $$(".modal-mask").forEach((m) => {
+      m.addEventListener("click", (e) => {
+        if (e.target === m || e.target.closest("[data-close]")) closeModal(m);
+      });
+    });
+
+    /* ===== 网址弹窗 ===== */
+    function fillCatSelect(selectedId) {
+      const sel = $("#fCat");
+      sel.innerHTML = state.categories
+        .map((c) => `<option value="${c.id}">${esc((c.icon ? c.icon + " " : "") + c.name)}</option>`)
+        .join("");
+      if (selectedId) sel.value = selectedId;
+    }
+    function openLinkModal(catId, linkId) {
+      const link = linkId ? (findLink(linkId) || {}).link : null;
+      $("#linkModalTitle").textContent = link ? "编辑网址" : "添加网址";
+      $("#fName").value = (link && link.name) || "";
+      $("#fUrl").value = link ? link.url : "";
+      $("#fDesc").value = (link && link.desc) || "";
+      $("#fIcon").value = (link && link.icon) || "";
+      const found = linkId ? findLink(linkId) : null;
+      fillCatSelect(found ? found.cat.id : catId || (state.categories[0] && state.categories[0].id));
+      $("#btnSaveLink").dataset.linkId = linkId || "";
+      openModal("#linkModal");
+    }
+    $("#btnSaveLink").onclick = () => {
+      const name = $("#fName").value.trim();
+      const url = $("#fUrl").value.trim();
+      if (!name || !url) { toast("请填写名称和网址"); return; }
+      const data = { name, url: normUrl(url), desc: $("#fDesc").value.trim(), icon: $("#fIcon").value.trim() };
+      const linkId = $("#btnSaveLink").dataset.linkId;
+      const targetCatId = $("#fCat").value;
+      if (linkId) {
+        const found = findLink(linkId);
+        if (!found) return;
+        if (found.cat.id !== targetCatId) {
+          found.cat.links = found.cat.links.filter((l) => l.id !== linkId);
+          findCat(targetCatId).links.push({ id: linkId, ...data });
+        } else {
+          Object.assign(found.link, data);
+        }
+      } else {
+        const cat = findCat(targetCatId);
+        if (!cat) { toast("请先创建分类"); return; }
+        cat.links.push({ id: uid(), ...data });
+      }
+      save(); render(); closeModal($("#linkModal"));
+      toast("已保存");
+    };
+
+    /* ===== 分类弹窗 ===== */
+    function openCatModal(catId) {
+      const cat = catId ? findCat(catId) : null;
+      $("#catModalTitle").textContent = cat ? "编辑分类" : "新建分类";
+      $("#cName").value = (cat && cat.name) || "";
+      $("#cIcon").value = (cat && cat.icon) || "";
+      $("#btnSaveCat").dataset.catId = catId || "";
+      openModal("#catModal");
+    }
+    $("#btnSaveCat").onclick = () => {
+      const name = $("#cName").value.trim();
+      if (!name) { toast("请填写分类名称"); return; }
+      const icon = $("#cIcon").value.trim();
+      const catId = $("#btnSaveCat").dataset.catId;
+      if (catId) {
+        const cat = findCat(catId);
+        cat.name = name;
+        cat.icon = icon;
+      } else {
+        state.categories.push({ id: uid(), name, icon, links: [] });
+      }
+      save(); render(); closeModal($("#catModal"));
+      toast("已保存");
+    };
+
+    /* ===== 事件委托：卡片操作 ===== */
+    $("#nav-main").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-act]");
+      if (!btn) return;
+      const act = btn.dataset.act;
+      const catId = btn.dataset.cat;
+      e.preventDefault();
+      e.stopPropagation();
+      if (act === "add-in-cat") openLinkModal(catId, null);
+      else if (act === "edit-cat") openCatModal(catId);
+      else if (act === "del-cat") {
+        const cat = findCat(catId);
+        if (confirm(`确定删除分类「${cat.name}」及其 ${cat.links.length} 个网址？`)) {
+          state.categories = state.categories.filter((c) => c.id !== catId);
+          save(); render(); toast("分类已删除");
+        }
+      } else if (act === "edit-link") openLinkModal(null, btn.closest("[data-link]").dataset.link);
+      else if (act === "del-link") {
+        const linkId = btn.closest("[data-link]").dataset.link;
+        const found = findLink(linkId);
+        if (confirm(`确定删除「${found.link.name}」？`)) {
+          found.cat.links = found.cat.links.filter((l) => l.id !== linkId);
+          save(); render(); toast("已删除");
+        }
+      }
+    });
+
+    /* ===== 拖拽排序 ===== */
+    document.addEventListener("dragstart", (e) => {
+      const linkEl = e.target.closest && e.target.closest(".link-card");
+      const catEl = e.target.closest && e.target.closest("[data-drag-cat]");
+      if (linkEl) {
+        dragInfo = { type: "link", catId: linkEl.dataset.cat, linkId: linkEl.dataset.link };
+        linkEl.classList.add("dragging");
+      } else if (catEl) {
+        dragInfo = { type: "cat", catId: catEl.dataset.dragCat };
+        catEl.classList.add("dragging");
+      }
+    });
+    document.addEventListener("dragend", () => {
+      $$(".dragging").forEach((el) => el.classList.remove("dragging"));
+      $$(".drag-over-top,.drag-over-bottom").forEach((el) => el.classList.remove("drag-over-top", "drag-over-bottom"));
+      dragInfo = null;
+    });
+    document.addEventListener("dragover", (e) => {
+      if (!dragInfo) return;
+      e.preventDefault();
+      if (dragInfo.type !== "link") return;
+      const card = e.target.closest && e.target.closest(".link-card");
+      $$(".drag-over-top,.drag-over-bottom").forEach((el) => el.classList.remove("drag-over-top", "drag-over-bottom"));
+      if (card && card.dataset.link !== dragInfo.linkId) {
+        const rect = card.getBoundingClientRect();
+        card.classList.add(e.clientY < rect.top + rect.height / 2 ? "drag-over-top" : "drag-over-bottom");
+      }
+    });
+    document.addEventListener("drop", (e) => {
+      if (!dragInfo) return;
+      e.preventDefault();
+      if (dragInfo.type === "link") {
+        const card = e.target.closest && e.target.closest(".link-card");
+        const grid = e.target.closest && e.target.closest("[data-drop-cat]");
+        const targetCatId = card ? card.dataset.cat : grid ? grid.dataset.dropCat : null;
+        if (!targetCatId) return;
+        const targetLinkId = card && card.dataset.link !== dragInfo.linkId ? card.dataset.link : null;
+        const before = card ? card.classList.contains("drag-over-top") : false;
+        moveLink(dragInfo.catId, dragInfo.linkId, targetCatId, targetLinkId, before);
+      } else if (dragInfo.type === "cat") {
+        const header = e.target.closest && e.target.closest("[data-drag-cat]");
+        if (header && header.dataset.dragCat !== dragInfo.catId) {
+          const from = state.categories.findIndex((c) => c.id === dragInfo.catId);
+          const [moved] = state.categories.splice(from, 1);
+          const to = state.categories.findIndex((c) => c.id === header.dataset.dragCat);
+          state.categories.splice(to, 0, moved);
+          save(); render();
+        }
+      }
+      dragInfo = null;
+    });
+
+    function moveLink(fromCatId, linkId, toCatId, targetLinkId, before) {
+      const fromCat = findCat(fromCatId);
+      const idx = fromCat.links.findIndex((l) => l.id === linkId);
+      if (idx === -1) return;
+      const [moved] = fromCat.links.splice(idx, 1);
+      const toCat = findCat(toCatId);
+      if (targetLinkId) {
+        let t = toCat.links.findIndex((l) => l.id === targetLinkId);
+        if (fromCatId === toCatId && idx < t) t--;
+        toCat.links.splice(before ? t : t + 1, 0, moved);
+      } else {
+        toCat.links.push(moved);
+      }
+      save(); render();
+    }
+
+    /* ===== 顶栏按钮 ===== */
+    $("#btnAddLink").onclick = () => {
+      if (!state.categories.length) { toast("请先创建一个分类"); openCatModal(null); return; }
+      openLinkModal(null, null);
+    };
+    $("#btnSettings").onclick = () => {
+      $("#sClock").checked = !!state.settings.showClock;
+      openModal("#setModal");
+    };
+    $("#sClock").onchange = (e) => {
+      state.settings.showClock = e.target.checked;
+      save(); tickClock();
+    };
+
+    /* 导出 / 导入 / 重置 */
+    $("#btnExport").onclick = () => {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `nav-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      toast("已导出备份文件");
+    };
+    $("#btnImport").onclick = () => $("#importFile").click();
+    $("#importFile").onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (!data || !Array.isArray(data.categories)) throw new Error("格式不正确");
+          state = data;
+          if (!state.settings) state.settings = { showClock: true };
+          save(); render(); tickClock();
+          toast("导入成功");
+          closeModal($("#setModal"));
+        } catch (err) {
+          toast("导入失败：" + err.message);
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = "";
+    };
+    $("#btnReset").onclick = () => {
+      if (confirm("确定恢复默认数据？当前所有数据将被清除（建议先导出备份）")) {
+        state = seedFromNavData();
+        save(); render(); tickClock();
+        toast("已恢复默认");
+        closeModal($("#setModal"));
+      }
+    };
+
+    /* ===== 搜索与快捷键 ===== */
+    $("#nav-search").addEventListener("input", render);
+    document.addEventListener("keydown", (e) => {
+      const active = document.activeElement;
+      const typing = active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.tagName === "SELECT");
+      if (e.key === "/" && !typing) { e.preventDefault(); $("#nav-search").focus(); }
+      if (e.key === "Escape") {
+        $$(".modal-mask.open").forEach(closeModal);
+        if (!typing) { $("#nav-search").value = ""; render(); }
+      }
+    });
+
+    /* ===== 启动 ===== */
+    document.title = (SITE ? SITE.siteName + " · " : "") + "网址导航";
+    document.getElementById("logo-accent").textContent = SITE ? SITE.siteNameAccent : "小站";
+    tickClock();
+    render();
+  </script>
+</body>
+</html>
